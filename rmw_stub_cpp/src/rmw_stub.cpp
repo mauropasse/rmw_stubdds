@@ -1315,28 +1315,13 @@ rmw_ret_t rmw_get_node_names(
   rcutils_string_array_t * node_names,
   rcutils_string_array_t * node_namespaces)
 {
-  RMW_CHECK_ARGUMENT_FOR_NULL(node, RMW_RET_INVALID_ARGUMENT);
-  RMW_CHECK_TYPE_IDENTIFIERS_MATCH(
-    node,
-    node->implementation_identifier,
-    stub_identifier,
-    return RMW_RET_INCORRECT_RMW_IMPLEMENTATION);
-  if (RMW_RET_OK != rmw_check_zero_rmw_string_array(node_names)) {
-    return RMW_RET_INVALID_ARGUMENT;
-  }
-  if (RMW_RET_OK != rmw_check_zero_rmw_string_array(node_namespaces)) {
-    return RMW_RET_INVALID_ARGUMENT;
-  }
 
-  auto common_context = static_cast<rmw_dds_common::Context *>(node->context->impl->common);
+  (void)node;
+  (void)node_names;
+  (void)node_namespaces;
 
-  rcutils_allocator_t allocator = rcutils_get_default_allocator();
-
-  return common_context->graph_cache.get_node_names(
-    node_names,
-    node_namespaces,
-    nullptr,
-    &allocator);
+  RMW_SET_ERROR_MSG("rmw_stub doesn't support discovery. Use IPC only.");
+  return RMW_RET_UNSUPPORTED;
 }
 
 rmw_ret_t rmw_get_node_names_with_enclaves(
