@@ -38,10 +38,12 @@
 
 #include "rosidl_typesupport_cpp/message_type_support.hpp"
 
+#include "rmw_stub_cpp/stub_client.hpp"
 #include "rmw_stub_cpp/stub_context_implementation.hpp"
 #include "rmw_stub_cpp/stub_guard_condition.hpp"
 #include "rmw_stub_cpp/stub_node.hpp"
 #include "rmw_stub_cpp/stub_publisher.hpp"
+#include "rmw_stub_cpp/stub_service.hpp"
 #include "rmw_stub_cpp/stub_subscription.hpp"
 
 using namespace std::literals::chrono_literals;
@@ -292,16 +294,9 @@ rmw_ret_t rmw_service_set_listener_callback(
   const void * service_handle,
   rmw_service_t * rmw_service)
 {
-  (void)user_data;
-  (void)callback;
-  (void)service_handle;
-  (void)rmw_service;
-  // auto service = static_cast<StubService *>(rmw_service->data);
-  // service->setCallback(user_data, callback, service_handle);
-  RCUTILS_LOG_ERROR_NAMED(
-    "rmw_stub.cpp",
-    "rmw_service_set_listener_callback: not supported (yet)");
-  return RMW_RET_UNSUPPORTED;
+  auto stub_service = static_cast<StubService *>(rmw_service->data);
+  stub_service->set_callback(user_data, callback, service_handle);
+  return RMW_RET_OK;
 }
 
 rmw_ret_t rmw_client_set_listener_callback(
@@ -310,16 +305,9 @@ rmw_ret_t rmw_client_set_listener_callback(
   const void * client_handle,
   rmw_client_t * rmw_client)
 {
-  (void)user_data;
-  (void)callback;
-  (void)client_handle;
-  (void)rmw_client;
-  // auto client = static_cast<StubClient *>(rmw_client->data);
-  // client->setCallback(user_data, callback, client_handle);
-  RCUTILS_LOG_ERROR_NAMED(
-    "rmw_stub.cpp",
-    "rmw_client_set_listener_callback: not supported (yet)");
-  return RMW_RET_UNSUPPORTED;
+  auto stub_client = static_cast<StubClient *>(rmw_client->data);
+  stub_client->set_callback(user_data, callback, client_handle);
+  return RMW_RET_OK;
 }
 
 rmw_ret_t rmw_event_set_listener_callback(
@@ -1267,21 +1255,23 @@ rmw_client_t * rmw_create_client(
 
   rmw_client_t * rmw_client = rmw_client_allocate();
   rmw_client->implementation_identifier = stub_identifier;
-  // StubClient * stub_client = new StubClient();
-  // rmw_client->data = stub_client;
+  StubClient * stub_client = new StubClient();
+  rmw_client->data = stub_client;
   rmw_client->service_name = reinterpret_cast<const char *>(rmw_allocate(strlen(service_name) + 1));
   memcpy(const_cast<char *>(rmw_client->service_name), service_name, strlen(service_name) + 1);
 
-  return nullptr;
+  return rmw_client;
 }
 
 rmw_ret_t rmw_destroy_client(rmw_node_t * node, rmw_client_t * client)
 {
   (void)node;
-  (void)client;
 
-  RMW_SET_ERROR_MSG("rmw_destroy_client not implemented");
-  return RMW_RET_UNSUPPORTED;
+  auto stub_client = static_cast<StubService *>(client->data);
+  delete stub_client;
+  rmw_free(const_cast<char *>(client->service_name));
+  rmw_client_free(client);
+  return RMW_RET_OK;
 }
 
 rmw_service_t * rmw_create_service(
@@ -1293,22 +1283,25 @@ rmw_service_t * rmw_create_service(
   (void)node;
   (void)type_supports;
   (void)qos_policies;
+
   rmw_service_t * rmw_service = rmw_service_allocate();
   rmw_service->implementation_identifier = stub_identifier;
-  // StubService * stub_service = new StubService();
-  // rmw_service->data = stub_service;
+  StubService * stub_service = new StubService();
+  rmw_service->data = stub_service;
   rmw_service->service_name = reinterpret_cast<const char *>(rmw_allocate(strlen(service_name) + 1));
-  //memcpy(const_cast<char *>(rmw_service->service_name), service_name, strlen(service_name) + 1);
-  return nullptr;
+  memcpy(const_cast<char *>(rmw_service->service_name), service_name, strlen(service_name) + 1);
+  return rmw_service;
 }
 
 rmw_ret_t rmw_destroy_service(rmw_node_t * node, rmw_service_t * service)
 {
   (void)node;
-  (void)service;
 
-  RMW_SET_ERROR_MSG("rmw_destroy_service not implemented");
-  return RMW_RET_UNSUPPORTED;
+  auto stub_service = static_cast<StubService *>(service->data);
+  delete stub_service;
+  rmw_free(const_cast<char *>(service->service_name));
+  rmw_service_free(service);
+  return RMW_RET_OK;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1544,8 +1537,9 @@ rmw_ret_t rmw_get_publishers_info_by_topic(
   (void)no_mangle;
   (void)publishers_info;
 
-  RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_publishers_info_by_topic not implemented");
-  return RMW_RET_UNSUPPORTED;
+  // RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_publishers_info_by_topic not implemented");
+  // return RMW_RET_UNSUPPORTED;
+  return RMW_RET_OK;
 }
 
 rmw_ret_t rmw_get_subscriptions_info_by_topic(
@@ -1561,7 +1555,8 @@ rmw_ret_t rmw_get_subscriptions_info_by_topic(
   (void)no_mangle;
   (void)subscriptions_info;
 
-  RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_subscriptions_info_by_topic not implemented");
-  return RMW_RET_UNSUPPORTED;
+  // RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_subscriptions_info_by_topic not implemented");
+  // return RMW_RET_UNSUPPORTED;
+  return RMW_RET_OK;
 }
 }  // extern "C"
