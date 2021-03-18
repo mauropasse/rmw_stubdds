@@ -21,7 +21,7 @@
 #include "rmw/get_node_info_and_types.h"
 #include "rmw/get_service_names_and_types.h"
 #include "rmw/get_topic_names_and_types.h"
-#include "rmw/listener_event_types.h"
+#include "rmw/listener_callback_type.h"
 #include "rmw/names_and_types.h"
 #include "rmw/rmw.h"
 #include "rmw/sanity_checks.h"
@@ -40,6 +40,7 @@
 
 #include "rmw_stub_cpp/stub_client.hpp"
 #include "rmw_stub_cpp/stub_context_implementation.hpp"
+#include "rmw_stub_cpp/stub_event.hpp"
 #include "rmw_stub_cpp/stub_guard_condition.hpp"
 #include "rmw_stub_cpp/stub_node.hpp"
 #include "rmw_stub_cpp/stub_publisher.hpp"
@@ -289,46 +290,34 @@ rmw_ret_t rmw_set_log_severity(rmw_log_severity_t severity)
 }
 
 rmw_ret_t rmw_service_set_listener_callback(
-  const void * user_data,
-  rmw_listener_cb_t callback,
-  const void * service_handle,
-  rmw_service_t * rmw_service)
+  rmw_service_t * rmw_service,
+  rmw_listener_callback_t callback,
+  const void * user_data)
 {
   auto stub_service = static_cast<StubService *>(rmw_service->data);
-  stub_service->set_callback(user_data, callback, service_handle);
+  stub_service->set_callback(callback, user_data);
   return RMW_RET_OK;
 }
 
 rmw_ret_t rmw_client_set_listener_callback(
-  const void * user_data,
-  rmw_listener_cb_t callback,
-  const void * client_handle,
-  rmw_client_t * rmw_client)
+  rmw_client_t * rmw_client,
+  rmw_listener_callback_t callback,
+  const void * user_data)
 {
   auto stub_client = static_cast<StubClient *>(rmw_client->data);
-  stub_client->set_callback(user_data, callback, client_handle);
+  stub_client->set_callback(callback, user_data);
   return RMW_RET_OK;
 }
 
 rmw_ret_t rmw_event_set_listener_callback(
-  const void * user_data,
-  rmw_listener_cb_t callback,
-  const void * waitable_handle,
   rmw_event_t * rmw_event,
+  rmw_listener_callback_t callback,
+  const void * user_data,
   bool use_previous_events)
 {
-  (void)user_data;
-  (void)callback;
-  (void)waitable_handle;
-  (void)rmw_event;
-  (void)use_previous_events;
-  // auto event = static_cast<StubEvent *>(rmw_event->data);
-  // event->setCallback(user_data, callback,
-  //                              waitable_handle, use_previous_events);
-  RCUTILS_LOG_ERROR_NAMED(
-    "rmw_stub.cpp",
-    "rmw_event_set_listener_callback: not supported (yet)");
-  return RMW_RET_UNSUPPORTED;
+  auto event = static_cast<StubEvent *>(rmw_event->data);
+  event->set_callback(callback, user_data, use_previous_events);
+  return RMW_RET_OK;
 }
 
 rmw_ret_t
@@ -880,13 +869,12 @@ rmw_subscription_t * rmw_create_subscription(
 }
 
 rmw_ret_t rmw_subscription_set_listener_callback(
-  const void * user_data,
-  rmw_listener_cb_t callback,
-  const void * subscription_handle,
-  rmw_subscription_t * rmw_subscription)
+  rmw_subscription_t * rmw_subscription,
+  rmw_listener_callback_t callback,
+  const void * user_data)
 {
   auto stub_sub = static_cast<StubSubscription *>(rmw_subscription->data);
-  stub_sub->set_callback(user_data, callback, subscription_handle);
+  stub_sub->set_callback(callback, user_data);
   return RMW_RET_OK;
 }
 
@@ -1123,15 +1111,14 @@ rmw_ret_t rmw_destroy_guard_condition(rmw_guard_condition_t * rmw_guard_conditio
 }
 
 rmw_ret_t rmw_guard_condition_set_listener_callback(
-  const void * user_data,
-  rmw_listener_cb_t callback,
-  const void * guard_condition_handle,
   rmw_guard_condition_t * rmw_guard_condition,
+  rmw_listener_callback_t callback,
+  const void * user_data,
   bool use_previous_events)
 {
   RET_NULL(rmw_guard_condition);
   auto stub_guard_condition = static_cast<StubGuardCondition *>(rmw_guard_condition->data);
-  stub_guard_condition->set_callback(user_data, callback, guard_condition_handle, use_previous_events);
+  stub_guard_condition->set_callback(callback, user_data, use_previous_events);
 
   return RMW_RET_OK;
 }

@@ -8,13 +8,11 @@ public:
 
   void
   set_callback(
-    const void * user_data,
-    rmw_listener_cb_t callback,
-    const void * client_handle)
+    rmw_listener_callback_t callback,
+    const void * user_data)
   {
     (void)user_data;
     (void)callback;
-    (void)client_handle;
   }
 };
 
