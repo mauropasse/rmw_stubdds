@@ -312,11 +312,10 @@ rmw_ret_t rmw_client_set_listener_callback(
 rmw_ret_t rmw_event_set_listener_callback(
   rmw_event_t * rmw_event,
   rmw_listener_callback_t callback,
-  const void * user_data,
-  bool use_previous_events)
+  const void * user_data)
 {
   auto event = static_cast<StubEvent *>(rmw_event->data);
-  event->set_callback(callback, user_data, use_previous_events);
+  event->set_callback(callback, user_data);
   return RMW_RET_OK;
 }
 
@@ -1113,12 +1112,11 @@ rmw_ret_t rmw_destroy_guard_condition(rmw_guard_condition_t * rmw_guard_conditio
 rmw_ret_t rmw_guard_condition_set_listener_callback(
   rmw_guard_condition_t * rmw_guard_condition,
   rmw_listener_callback_t callback,
-  const void * user_data,
-  bool use_previous_events)
+  const void * user_data)
 {
   RET_NULL(rmw_guard_condition);
   auto stub_guard_condition = static_cast<StubGuardCondition *>(rmw_guard_condition->data);
-  stub_guard_condition->set_callback(callback, user_data, use_previous_events);
+  stub_guard_condition->set_callback(callback, user_data);
 
   return RMW_RET_OK;
 }

@@ -42,15 +42,14 @@ public:
   void
   set_callback(
     rmw_listener_callback_t callback,
-    const void * user_data,
-    bool use_previous_events)
+    const void * user_data)
   {
     std::unique_lock<std::mutex> lock_mutex(listener_callback_mutex_);
 
     user_data_ = user_data;
     listener_callback_ = callback;
 
-    if(callback && use_previous_events) {
+    if(callback) {
       // Push events arrived before setting the executor's callback
       for(uint64_t i = 0; i < unread_count_; i++) {
         callback(user_data);

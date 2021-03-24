@@ -9,12 +9,10 @@ public:
   void
   set_callback(
     rmw_listener_callback_t callback,
-    const void * user_data,
-    bool use_previous_events)
+    const void * user_data)
   {
     (void)callback;
     (void)user_data;
-    (void)use_previous_events;
   }
 };
 
