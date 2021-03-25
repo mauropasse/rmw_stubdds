@@ -18,7 +18,7 @@ public:
     std::unique_lock<std::mutex> lock_mutex(listener_callback_mutex_);
 
     if(listener_callback_) {
-      listener_callback_(user_data_);
+      listener_callback_(user_data_, 1);
     } else {
       has_triggered_ = true;
       unread_count_++;
@@ -51,9 +51,7 @@ public:
 
     if(callback) {
       // Push events arrived before setting the executor's callback
-      for(uint64_t i = 0; i < unread_count_; i++) {
-        callback(user_data);
-      }
+      callback(user_data, unread_count_);
       // Reset unread count
       unread_count_ = 0;
     }
