@@ -1109,18 +1109,6 @@ rmw_ret_t rmw_destroy_guard_condition(rmw_guard_condition_t * rmw_guard_conditio
   return RMW_RET_OK;
 }
 
-rmw_ret_t rmw_guard_condition_set_listener_callback(
-  rmw_guard_condition_t * rmw_guard_condition,
-  rmw_listener_callback_t callback,
-  const void * user_data)
-{
-  RET_NULL(rmw_guard_condition);
-  auto stub_guard_condition = static_cast<StubGuardCondition *>(rmw_guard_condition->data);
-  stub_guard_condition->set_callback(callback, user_data);
-
-  return RMW_RET_OK;
-}
-
 rmw_ret_t rmw_trigger_guard_condition(
   const rmw_guard_condition_t * rmw_guard_condition)
 {
