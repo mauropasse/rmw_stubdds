@@ -21,12 +21,13 @@
 #include "rmw/get_node_info_and_types.h"
 #include "rmw/get_service_names_and_types.h"
 #include "rmw/get_topic_names_and_types.h"
-#include "rmw/listener_callback_type.h"
 #include "rmw/names_and_types.h"
 #include "rmw/rmw.h"
 #include "rmw/sanity_checks.h"
 #include "rmw/validate_namespace.h"
 #include "rmw/validate_node_name.h"
+
+#include "rcl/event_callback.h"
 
 #include "rcpputils/scope_exit.hpp"
 #include "rmw/impl/cpp/key_value.hpp"
@@ -289,9 +290,9 @@ rmw_ret_t rmw_set_log_severity(rmw_log_severity_t severity)
   return RMW_RET_UNSUPPORTED;
 }
 
-rmw_ret_t rmw_service_set_listener_callback(
+rmw_ret_t rmw_service_set_on_new_request_callback(
   rmw_service_t * rmw_service,
-  rmw_listener_callback_t callback,
+  rmw_event_callback_t callback,
   const void * user_data)
 {
   auto stub_service = static_cast<StubService *>(rmw_service->data);
@@ -299,9 +300,9 @@ rmw_ret_t rmw_service_set_listener_callback(
   return RMW_RET_OK;
 }
 
-rmw_ret_t rmw_client_set_listener_callback(
+rmw_ret_t rmw_client_set_on_new_response_callback(
   rmw_client_t * rmw_client,
-  rmw_listener_callback_t callback,
+  rmw_event_callback_t callback,
   const void * user_data)
 {
   auto stub_client = static_cast<StubClient *>(rmw_client->data);
@@ -309,9 +310,9 @@ rmw_ret_t rmw_client_set_listener_callback(
   return RMW_RET_OK;
 }
 
-rmw_ret_t rmw_event_set_listener_callback(
+rmw_ret_t rmw_event_set_callback(
   rmw_event_t * rmw_event,
-  rmw_listener_callback_t callback,
+  rmw_event_callback_t callback,
   const void * user_data)
 {
   auto event = static_cast<StubEvent *>(rmw_event->data);
@@ -867,9 +868,9 @@ rmw_subscription_t * rmw_create_subscription(
   return stub_sub;
 }
 
-rmw_ret_t rmw_subscription_set_listener_callback(
+rmw_ret_t rmw_subscription_set_on_new_message_callback(
   rmw_subscription_t * rmw_subscription,
-  rmw_listener_callback_t callback,
+  rmw_event_callback_t callback,
   const void * user_data)
 {
   auto stub_sub = static_cast<StubSubscription *>(rmw_subscription->data);

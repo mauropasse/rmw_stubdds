@@ -4,7 +4,7 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "rmw/listener_callback_type.h"
+#include "rcl/event_callback.h"
 
 class StubGuardCondition
 {
@@ -41,7 +41,7 @@ public:
   // new event from this listener has ocurred
   void
   set_callback(
-    rmw_listener_callback_t callback,
+    rmw_event_callback_t callback,
     const void * user_data)
   {
     std::unique_lock<std::mutex> lock_mutex(listener_callback_mutex_);
@@ -61,7 +61,7 @@ private:
   bool has_triggered_{false};
 
   // Events executor
-  rmw_listener_callback_t listener_callback_{nullptr};
+  rmw_event_callback_t listener_callback_{nullptr};
   const void * user_data_{nullptr};
   std::mutex listener_callback_mutex_;
   uint64_t unread_count_ = 0;
