@@ -18,16 +18,17 @@
 #include "rmw/convert_rcutils_ret_to_rmw_ret.h"
 #include "rmw/error_handling.h"
 #include "rmw/event.h"
+#include "rmw/event_callback_type.h"
+#include "rmw/get_network_flow_endpoints.h"
 #include "rmw/get_node_info_and_types.h"
 #include "rmw/get_service_names_and_types.h"
 #include "rmw/get_topic_names_and_types.h"
 #include "rmw/names_and_types.h"
 #include "rmw/rmw.h"
 #include "rmw/sanity_checks.h"
+#include "rmw/types.h"
 #include "rmw/validate_namespace.h"
 #include "rmw/validate_node_name.h"
-
-#include "rcl/event_callback.h"
 
 #include "rcpputils/scope_exit.hpp"
 #include "rmw/impl/cpp/key_value.hpp"
@@ -1496,9 +1497,8 @@ rmw_ret_t rmw_get_publishers_info_by_topic(
   (void)no_mangle;
   (void)publishers_info;
 
-  // RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_publishers_info_by_topic not implemented");
-  // return RMW_RET_UNSUPPORTED;
-  return RMW_RET_OK;
+  RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_publishers_info_by_topic not implemented");
+  return RMW_RET_UNSUPPORTED;
 }
 
 rmw_ret_t rmw_get_subscriptions_info_by_topic(
@@ -1514,8 +1514,50 @@ rmw_ret_t rmw_get_subscriptions_info_by_topic(
   (void)no_mangle;
   (void)subscriptions_info;
 
-  // RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_subscriptions_info_by_topic not implemented");
-  // return RMW_RET_UNSUPPORTED;
-  return RMW_RET_OK;
+  RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_subscriptions_info_by_topic not implemented");
+  return RMW_RET_UNSUPPORTED;
+}
+
+rmw_ret_t
+rmw_publisher_get_network_flow_endpoints(
+  const rmw_publisher_t * publisher,
+  rcutils_allocator_t * allocator,
+  rmw_network_flow_endpoint_array_t * network_flow_endpoint_array)
+{
+  (void) publisher;
+  (void) allocator;
+  (void) network_flow_endpoint_array;
+  RMW_SET_ERROR_MSG("rmw_publisher_get_network_flow_endpoints not implemented");
+  return RMW_RET_UNSUPPORTED;
+}
+
+rmw_ret_t
+rmw_subscription_get_network_flow_endpoints(
+  const rmw_subscription_t * subscription,
+  rcutils_allocator_t * allocator,
+  rmw_network_flow_endpoint_array_t * network_flow_endpoint_array)
+{
+  (void) subscription;
+  (void) allocator;
+  (void) network_flow_endpoint_array;
+  RMW_SET_ERROR_MSG("rmw_subscription_get_network_flow_endpoints not implemented");
+  return RMW_RET_UNSUPPORTED;
+}
+
+rmw_ret_t rmw_qos_profile_check_compatible(
+  const rmw_qos_profile_t publisher_profile,
+  const rmw_qos_profile_t subscription_profile,
+  rmw_qos_compatibility_type_t * compatibility,
+  char * reason,
+  size_t reason_size)
+{
+  (void)publisher_profile;
+  (void)subscription_profile;
+  (void)compatibility;
+  (void)reason;
+  (void)reason_size;
+
+  RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_qos_profile_check_compatible not implemented");
+  return RMW_RET_UNSUPPORTED;
 }
 }  // extern "C"

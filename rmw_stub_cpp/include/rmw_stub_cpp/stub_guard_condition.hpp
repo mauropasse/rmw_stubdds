@@ -4,7 +4,7 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "rcl/event_callback.h"
+#include "rmw/event_callback_type.h"
 
 class StubGuardCondition
 {
