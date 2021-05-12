@@ -76,7 +76,7 @@ static rmw_publisher_t * create_publisher(
 {
   (void)type_supports;
 
-  auto * stub_pub = new StubPublisher(qos_policies);
+  auto * stub_pub = new StubPublisher(qos_policies, topic_name);
 
   rmw_publisher_t * rmw_publisher = rmw_publisher_allocate();
 
@@ -107,7 +107,7 @@ static rmw_subscription_t * create_subscription(
 {
   (void)type_supports;
 
-  auto * stub_sub = new StubSubscription(qos_policies);
+  auto * stub_sub = new StubSubscription(qos_policies, topic_name);
 
   rmw_subscription_t * rmw_subscription = rmw_subscription_allocate();
 

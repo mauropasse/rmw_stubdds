@@ -6,7 +6,10 @@
 class StubPublisher
 {
 public:
-  StubPublisher(const rmw_qos_profile_t * qos_policies)
+  StubPublisher(
+    const rmw_qos_profile_t * qos_policies,
+    const char * topic_name)
+  : topic_name_(std::string(topic_name))
   {
     pub_qos_ = qos_policies;
     static uint64_t id = 0;
@@ -33,8 +36,7 @@ private:
   const rmw_qos_profile_t * pub_qos_;
   std::mutex mutex_;
   std::vector<uint64_t> matched_subscriptions_;
-  std::string topic_name_;
-
+  const std::string topic_name_;
 };
 
 #endif  // STUB_PUBLISHER_HPP_

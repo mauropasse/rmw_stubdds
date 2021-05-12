@@ -4,7 +4,10 @@
 class StubSubscription
 {
 public:
-  StubSubscription(const rmw_qos_profile_t * qos_policies)
+  StubSubscription(
+    const rmw_qos_profile_t * qos_policies,
+    const char * topic_name)
+  : topic_name_(std::string(topic_name))
   {
     sub_qos_ = qos_policies;
     static uint64_t id = 0;
@@ -38,6 +41,7 @@ public:
 private:
   uint64_t sub_id_;
   const rmw_qos_profile_t * sub_qos_;
+  const std::string topic_name_;
 };
 
 #endif  // STUB_SUBSCRIPTION_HPP_
