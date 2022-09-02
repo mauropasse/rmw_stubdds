@@ -1,7 +1,7 @@
 #ifndef STUB_CONTEXT_IMPLEMENTATION_HPP_
 #define STUB_CONTEXT_IMPLEMENTATION_HPP_
 
-struct rmw_context_impl_t
+struct rmw_context_impl_s
 {
   /// Pointer to `rmw_dds_common::Context`.
   void * common;
@@ -18,7 +18,7 @@ struct rmw_context_impl_t
   /* Shutdown flag */
   bool is_shutdown{false};
 
-  rmw_context_impl_t()
+  rmw_context_impl_s()
   : common()
   {
   }
@@ -32,7 +32,7 @@ struct rmw_context_impl_t
   rmw_ret_t
   fini();
 
-  ~rmw_context_impl_t()
+  ~rmw_context_impl_s()
   {
     if (0u != this->node_count) {
       RCUTILS_SAFE_FWRITE_TO_STDERR(
