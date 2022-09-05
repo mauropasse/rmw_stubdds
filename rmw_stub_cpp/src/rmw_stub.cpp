@@ -19,6 +19,7 @@
 #include "rmw/error_handling.h"
 #include "rmw/event.h"
 #include "rmw/event_callback_type.h"
+#include "rmw/features.h"
 #include "rmw/get_network_flow_endpoints.h"
 #include "rmw/get_node_info_and_types.h"
 #include "rmw/get_service_names_and_types.h"
@@ -1497,7 +1498,7 @@ rmw_ret_t rmw_get_publishers_info_by_topic(
   (void)no_mangle;
   (void)publishers_info;
 
-  RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_publishers_info_by_topic not implemented");
+  RCUTILS_LOG_ERROR_NAMED("rmw_stub.cpp","rmw_get_publishers_info_by_topic not implemented");
   return RMW_RET_UNSUPPORTED;
 }
 
@@ -1514,7 +1515,7 @@ rmw_ret_t rmw_get_subscriptions_info_by_topic(
   (void)no_mangle;
   (void)subscriptions_info;
 
-  RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_get_subscriptions_info_by_topic not implemented");
+  RCUTILS_LOG_ERROR_NAMED("rmw_stub.cpp","rmw_get_subscriptions_info_by_topic not implemented");
   return RMW_RET_UNSUPPORTED;
 }
 
@@ -1553,11 +1554,89 @@ rmw_ret_t rmw_qos_profile_check_compatible(
 {
   (void)publisher_profile;
   (void)subscription_profile;
-  (void)compatibility;
+  *compatibility = RMW_QOS_COMPATIBILITY_OK;
   (void)reason;
   (void)reason_size;
 
-  RCUTILS_LOG_ERROR_NAMED("rmw_node.cpp","rmw_qos_profile_check_compatible not implemented");
+  // Stub is always compatible :)
+  return RMW_RET_OK;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+///////////                                                                   ///////////
+///////////    HUMBLE UPDATE                                                  ///////////
+///////////                                                                   ///////////
+/////////////////////////////////////////////////////////////////////////////////////////
+
+rmw_ret_t rmw_publisher_wait_for_all_acked(
+  const rmw_publisher_t * publisher,
+  rmw_time_t wait_timeout)
+{
+  (void) publisher;
+  (void) wait_timeout;
   return RMW_RET_UNSUPPORTED;
 }
+
+rmw_ret_t rmw_subscription_set_content_filter(
+  rmw_subscription_t * subscription,
+  const rmw_subscription_content_filter_options_t * options)
+{
+  (void) subscription;
+  (void) options;
+  return RMW_RET_UNSUPPORTED;
+}
+
+rmw_ret_t rmw_subscription_get_content_filter(
+  const rmw_subscription_t * subscription,
+  rcutils_allocator_t * allocator,
+  rmw_subscription_content_filter_options_t * options)
+{
+  (void) subscription;
+  (void) allocator;
+  (void) options;
+  return RMW_RET_UNSUPPORTED;
+}
+
+rmw_ret_t rmw_service_response_publisher_get_actual_qos(
+  const rmw_service_t * service,
+  rmw_qos_profile_t * qos)
+{
+  (void) service;
+  *qos = rmw_qos_profile_services_default;
+  return RMW_RET_OK;
+}
+
+rmw_ret_t rmw_service_request_subscription_get_actual_qos(
+  const rmw_service_t * service,
+  rmw_qos_profile_t * qos)
+{
+  (void) service;
+  *qos = rmw_qos_profile_services_default;
+  return RMW_RET_OK;
+}
+
+rmw_ret_t rmw_client_request_publisher_get_actual_qos(
+  const rmw_client_t * client,
+  rmw_qos_profile_t * qos)
+{
+  (void) client;
+  *qos = rmw_qos_profile_services_default;
+  return RMW_RET_OK;
+}
+
+rmw_ret_t rmw_client_response_subscription_get_actual_qos(
+  const rmw_client_t * client,
+  rmw_qos_profile_t * qos)
+{
+  (void) client;
+  *qos = rmw_qos_profile_services_default;
+  return RMW_RET_OK;
+}
+
+bool rmw_feature_supported(rmw_feature_t feature)
+{
+  (void)feature;
+  return false;
+}
+
 }  // extern "C"
