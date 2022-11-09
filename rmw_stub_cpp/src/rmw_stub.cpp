@@ -562,8 +562,7 @@ rmw_ret_t rmw_publish(
   (void)ros_message;
   (void)allocation;
 
-  RMW_SET_ERROR_MSG("rmw_publish not implemented");
-  return RMW_RET_UNSUPPORTED;
+  return RMW_RET_OK;
 }
 
 rmw_ret_t rmw_publish_serialized_message(
