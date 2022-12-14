@@ -50,10 +50,6 @@
 #include "rmw_stub_cpp/stub_service.hpp"
 #include "rmw_stub_cpp/stub_subscription.hpp"
 
-// Backtrace
-#include <execinfo.h>
-#include <stdio.h>
-
 using namespace std::literals::chrono_literals;
 
 using rmw_dds_common::msg::ParticipantEntitiesInfo;
@@ -1159,17 +1155,8 @@ rmw_ret_t rmw_wait(
   (void)wait_set;
   (void)wait_timeout;
 
-  // Get backtrace
-  void * callstack[128];
-  int i, frames = backtrace(callstack, 128);
-  char** strs = backtrace_symbols(callstack, frames);
-  for (i = 0; i < frames; ++i) {
-    printf("%s\n", strs[i]);
-  }
-  free(strs);
-
-  // RMW_SET_ERROR_MSG("rmw_wait not implemented");
-  return RMW_RET_OK;
+  RMW_SET_ERROR_MSG("rmw_wait not implemented");
+  return RMW_RET_UNSUPPORTED;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -1226,15 +1213,6 @@ rmw_ret_t rmw_send_request(
   (void)client;
   (void)ros_request;
   (void)sequence_id;
-
-  // Get backtrace
-  void * callstack[128];
-  int i, frames = backtrace(callstack, 128);
-  char** strs = backtrace_symbols(callstack, frames);
-  for (i = 0; i < frames; ++i) {
-    printf("%s\n", strs[i]);
-  }
-  free(strs);
 
   RMW_SET_ERROR_MSG("rmw_send_response not implemented");
   return RMW_RET_UNSUPPORTED;
