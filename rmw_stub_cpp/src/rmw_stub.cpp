@@ -562,6 +562,8 @@ rmw_ret_t rmw_publish(
   (void)ros_message;
   (void)allocation;
 
+  std::cout << "STUB rmw_publish: " << publisher->topic_name << std::endl;
+
   return RMW_RET_OK;
 }
 
