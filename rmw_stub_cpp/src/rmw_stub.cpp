@@ -562,7 +562,8 @@ rmw_ret_t rmw_publish(
   (void)ros_message;
   (void)allocation;
 
-  std::cout << "STUB rmw_publish: " << publisher->topic_name << std::endl;
+  std::cout << "Stub-DDS rmw_publish, no one will get this msg - "
+            << publisher->topic_name << std::endl;
 
   return RMW_RET_OK;
 }
@@ -720,7 +721,7 @@ rmw_ret_t rmw_publisher_count_matched_subscriptions(
     stub_identifier,
     return RMW_RET_INCORRECT_RMW_IMPLEMENTATION);
 
-  *subscription_count = 0;
+  *subscription_count = 1;
 
   return RMW_RET_OK;
 }
